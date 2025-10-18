@@ -1,5 +1,5 @@
 # Optimizer-W11
-Optimizer W11 is a free application that enhances the performance and privacy of Windows 11. It disables non-essential services, telemetry, Cortana, widgets, and AI features. It configures power optimizations, TCP/IP network settings, and cleans temporary files. It features an intuitive interface with real-time progress tracking. It is open source and developed in Rust.
+Optimizer W11 is a free application that enhances the performance and privacy of Windows 11. It disables non-essential services, telemetry, Cortana, widgets, and AI features. It configures power optimizations, TCP/IP network settings, and cleans temporary files. It features an intuitive interface with real-time progress tracking.
 
 ## 📌 Requirements
 *   Windows 11
