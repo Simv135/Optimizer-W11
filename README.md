@@ -6,7 +6,7 @@ Optimizer W11 is a free application that enhances the performance and privacy of
 *   Administrator privileges
 
 ## ▶️ Usage
-1.  Download the [latest available release](https://github.com/Simv135/playlist-dl/releases/tag/auto-updated).
+1.  Download the [latest available release](https://github.com/Simv135/Optimizer-W11/releases).
 3.  Click "Optimize" to start the process.
 4.  Wait for completion - the progress bar will show the current status.
 5.  Restart the system after completion to apply all changes.
