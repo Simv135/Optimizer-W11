@@ -7,12 +7,12 @@ Optimizer W11 is a free application that enhances the performance and privacy of
 
 ## ▶️ Usage
 1.  Download the [latest available release](https://github.com/Simv135/Optimizer-W11/releases).
-3.  Click "Optimize" to start the process.
-4.  Wait for completion - the progress bar will show the current status.
-5.  Restart the system after completion to apply all changes.
+2.  Click "Optimize" to start the process.
+3.  Wait for completion - the progress bar will show the current status.
+4.  Restart the system after completion to apply all changes.
 
 ## 🚀 Features
-Implemented Optimizations
+**Implemented Optimizations**
 *   **Power Management:** Restores default power plans and activates power-saving mode.
 *   **Service Configuration:** Disables non-essential services to improve performance.
 *   **Privacy & Security:** Disables telemetry, Cortana, widgets, and tracking features.
@@ -23,6 +23,11 @@ Implemented Optimizations
 *   **Network Configuration:** Sets optimal DNS (Cloudflare) and optimizes TCP/IP parameters.
 *   **Time Synchronization:** Configures reliable time server synchronization.
 *   **System Cleanup:** Cleans temporary files and system cache.
+*   **BCD Tweaks:** Optimizes boot configuration for better performance.
+*   **NTFS Optimizations:** Improves filesystem performance.
+*   **Gaming Optimizations:** MMCSS configuration and full-screen optimizations.
+*   **USB Optimization:** Configures selective suspend settings.
+*   **Mouse & Keyboard:** Optimizes input responsiveness.
 
 ## ⚠️ Warnings
 *   **Backup:** It is recommended to create a restore point before use.
