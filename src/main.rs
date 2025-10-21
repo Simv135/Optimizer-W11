@@ -104,7 +104,7 @@ fn main() -> Result<(), eframe::Error> {
         viewport: egui::ViewportBuilder::default()
             .with_inner_size([400.0, 150.0])
             .with_resizable(false)
-            .with_title("Optimizer W11  -  v1.1.0"),
+            .with_title("Optimizer W11  -  v1.2.0"),
         ..Default::default()
     };
 
@@ -501,7 +501,7 @@ fn configure_service(service: &str, start_type: &str) -> Result<(), String> {
     Ok(())
 }
 
-// Crea un comando con la console nascosta (solo Windows)
+// Crea un comando con la console nascosta
 fn create_command(program: &str) -> Command {
     let mut command = Command::new(program);
     
