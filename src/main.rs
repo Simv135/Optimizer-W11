@@ -117,6 +117,7 @@ fn main() -> Result<(), eframe::Error> {
 
 fn run_optimization_steps(sender: mpsc::Sender<AppState>) {
     let steps: Vec<(&str, fn() -> Result<(), String>)> = vec![
+        ("Backup and cleaning update cache", step_backup_clean_update_cache),
         ("Energy optimizations", step_power_optimization), 
         ("BCD Tweaks", step_bcd_tweaks),
         ("NTFS Optimizations", step_ntfs_tweaks),
@@ -182,7 +183,18 @@ fn run_optimization_steps(sender: mpsc::Sender<AppState>) {
     let _ = sender.send(final_state);
 }
 
-// Funzioni di ottimizzazione
+fn step_backup_clean_update_cache() -> Result<(), String> {
+    // Backup e pulizia SoftwareDistribution
+    let _ = run_command("cmd", &["/c", "if exist \"C:\\Windows\\SoftwareDistribution.bak\" rmdir /s /q \"C:\\Windows\\SoftwareDistribution.bak\""]);
+    let _ = run_command("cmd", &["/c", "if exist \"C:\\Windows\\SoftwareDistribution\" ren \"C:\\Windows\\SoftwareDistribution\" \"SoftwareDistribution.bak\""]);
+    
+    // Backup e pulizia catroot2
+    let _ = run_command("cmd", &["/c", "if exist \"C:\\Windows\\System32\\catroot2.bak\" rmdir /s /q \"C:\\Windows\\System32\\catroot2.bak\""]);
+    let _ = run_command("cmd", &["/c", "if exist \"C:\\Windows\\System32\\catroot2\" ren \"C:\\Windows\\System32\\catroot2\" \"catroot2.bak\""]);
+    
+    Ok(())
+}
+
 fn step_power_optimization() -> Result<(), String> {
     run_command("powercfg", &["/restoredefaultschemes"])?;
     run_command("powercfg", &["/setactive", "SCHEME_MIN"])?;
@@ -286,9 +298,7 @@ fn step_windows_privacy_settings() -> Result<(), String> {
         run_command("reg", &["add", &path, "/v", "Value", "/t", "REG_SZ", "/d", "Deny", "/f"])?;
     }
 
-    // Consenti microfono e webcam
-    run_command("reg", &["add", "HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\microphone", "/v", "Value", "/t", "REG_SZ", "/d", "Allow", "/f"])?;
-    run_command("reg", &["add", "HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\webcam", "/v", "Value", "/t", "REG_SZ", "/d", "Allow", "/f"])
+    Ok(())
 }
 
 fn step_preinstalled_apps() -> Result<(), String> {
@@ -455,6 +465,7 @@ fn step_system_cleanup_extended() -> Result<(), String> {
     for path in &cleanup_paths {
         let _ = run_command("del", &["/s", "/f", "/q", path]);
     }
+    
     Ok(())
 }
 
