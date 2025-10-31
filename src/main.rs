@@ -104,7 +104,7 @@ fn main() -> Result<(), eframe::Error> {
         viewport: egui::ViewportBuilder::default()
             .with_inner_size([400.0, 150.0])
             .with_resizable(false)
-            .with_title("Optimizer W11  -  v1.2.0"),
+            .with_title("Optimizer W11  -  v1.3.0"),
         ..Default::default()
     };
 
@@ -226,7 +226,11 @@ fn step_timer_distribution() -> Result<(), String> {
 }
 
 fn step_menu_delay_reduction() -> Result<(), String> {
-    run_command("reg", &["add", "HKCU\\Control Panel\\Desktop", "/v", "MenuShowDelay", "/t", "REG_DWORD", "/d", "0", "/f"])
+    run_command("reg", &["add", "HKCU\\Control Panel\\Desktop", "/v", "MenuShowDelay", "/t", "REG_DWORD", "/d", "0", "/f"])?;
+	//menu contestuale classico
+	run_command("reg", &["add", "HKCU\\SOFTWARE\\CLASSES\\CLSID\\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}\\InprocServer32", "/ve", "/f"])?;
+	//mostra estensione file
+	run_command("reg", &["add", "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced", "/v", "HideFileExt", "/t", "REG_DWORD", "/d", "0", "/f"])
 }
 
 fn step_windows_insider_experiments() -> Result<(), String> {
@@ -377,21 +381,9 @@ fn step_mouse_keyboard_optimizations() -> Result<(), String> {
 }
 
 fn step_network_config_extended() -> Result<(), String> {
-    run_command("netsh", &["interface", "ipv4", "set", "dnsservers", "Ethernet", "static", "1.1.1.1", "primary"])?;
-    run_command("netsh", &["interface", "ipv4", "add", "dnsservers", "Ethernet", "1.0.0.1", "index=2"])?;
-    run_command("netsh", &["interface", "ipv4", "set", "dnsservers", "Wi-Fi", "static", "1.1.1.1", "primary"])?;
-    run_command("netsh", &["interface", "ipv4", "add", "dnsservers", "Wi-Fi", "1.0.0.1", "index=2"])?;
-
+    run_command("netsh", &["int", "tcp", "reset"])?;
+	run_command("netsh", &["winsock", "reset"])?;
     run_command("ipconfig", &["/flushdns"])?;
-    
-    run_command("netsh", &["int", "tcp", "set", "supplemental", "Template=Compat", "CongestionProvider=bbr2"])?;
-    run_command("netsh", &["int", "tcp", "set", "supplemental", "Template=Internet", "CongestionProvider=bbr2"])?;
-    
-    run_command("netsh", &["int", "tcp", "set", "global", "rss=enabled"])?;
-    run_command("netsh", &["int", "tcp", "set", "global", "autotuninglevel=normal"])?;
-    run_command("netsh", &["int", "tcp", "set", "global", "dca=enabled"])?;
-    run_command("netsh", &["int", "tcp", "set", "global", "ecncapability=enabled"])?;
-    run_command("netsh", &["int", "tcp", "set", "global", "initialrto=1000"])?;
 
     run_command("reg", &["add", "HKLM\\SYSTEM\\CurrentControlSet\\Services\\Tcpip\\Parameters", "/v", "DefaultTTL", "/t", "REG_DWORD", "/d", "64", "/f"])?;
     run_command("reg", &["add", "HKLM\\SYSTEM\\CurrentControlSet\\Services\\Tcpip\\Parameters", "/v", "Tcp1323Opts", "/t", "REG_DWORD", "/d", "1", "/f"])?;
@@ -412,8 +404,12 @@ fn step_remove_apps() -> Result<(), String> {
     ];
 
     for app in &apps {
-        let _ = run_command("PowerShell", &["-Command", &format!("Get-AppxPackage -allusers *{}* | Remove-AppxPackage", app)]);
+        let _ = run_command("PowerShell", &["-Command", &format!("Get-AppxPackage -allusers *{}* | Remove-AppxPackage", app)])?;
     }
+	
+	run_command("Powershell", &["-Command", "Get-AppxPackage *WebExperience* | Remove-AppxPackage -ErrorAction SilentlyContinue"])?;
+	run_command("Powershell", &["-Command", "Get-AppxPackage *Bing* | Where-Object {\\$_.Name -notlike '*Client.CBS*'} | Remove-AppxPackage -ErrorAction SilentlyContinue"])?;
+
     Ok(())
 }
 
