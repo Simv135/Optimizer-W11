@@ -104,7 +104,7 @@ fn main() -> Result<(), eframe::Error> {
         viewport: egui::ViewportBuilder::default()
             .with_inner_size([400.0, 150.0])
             .with_resizable(false)
-            .with_title("Optimizer W11  -  v1.3.0"),
+            .with_title("Optimizer W11  -  v1.4.0"),
         ..Default::default()
     };
 
@@ -400,16 +400,15 @@ fn step_remove_apps() -> Result<(), String> {
         "Microsoft.windowscommunicationsapps", "Microsoft.WindowsFeedbackHub",
         "Microsoft.WindowsMaps", "Microsoft.WindowsPhone", "Microsoft.WindowsSoundRecorder",
         "Microsoft.XboxApp", "Microsoft.XboxGameCallableUI", "Microsoft.XboxIdentityProvider",
-        "Microsoft.ZuneMusic", "Microsoft.ZuneVideo"
+        "Microsoft.ZuneMusic", "Microsoft.ZuneVideo", "WebExperience", "Microsoft.Whiteboard",
+		"Microsoft.MicrosoftStickyNotes", "Microsoft.MixedReality.Portal", "Microsoft.Office.OneNote",
+		"Microsoft.Outlook", "Teams"
     ];
 
     for app in &apps {
         let _ = run_command("PowerShell", &["-Command", &format!("Get-AppxPackage -allusers *{}* | Remove-AppxPackage", app)])?;
     }
 	
-	run_command("Powershell", &["-Command", "Get-AppxPackage *WebExperience* | Remove-AppxPackage -ErrorAction SilentlyContinue"])?;
-	run_command("Powershell", &["-Command", "Get-AppxPackage *Bing* | Where-Object {\\$_.Name -notlike '*Client.CBS*'} | Remove-AppxPackage -ErrorAction SilentlyContinue"])?;
-
     Ok(())
 }
 
