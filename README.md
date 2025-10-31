@@ -20,7 +20,7 @@ Optimizer W11 is a performance tuning tool for Windows 11 that automates 33 opti
 *   **Recall:** Checks for and disables the Recall feature (if present).
 *   **Registry Cleanup:** Removes unnecessary registry keys from preinstalled applications.
 *   **Graphics Optimizations:** Disables transparency and visual effects for better performance.
-*   **Network Configuration:** SResets the TCP stack, restores network configurations, and flushes the DNS cache.
+*   **Network Configuration:** Resets the TCP stack, restores network configurations, and flushes the DNS cache.
 *   **Time Synchronization:** Configures reliable time server synchronization.
 *   **System Cleanup:** Cleans temporary files and system cache.
 *   **BCD Tweaks:** Optimizes boot configuration for better performance.
