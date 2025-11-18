@@ -1,4 +1,3 @@
-// build.rs
 extern crate embed_manifest;
 
 fn main() {
