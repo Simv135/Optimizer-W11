@@ -171,7 +171,7 @@ fn run_optimization_steps(sender: mpsc::Sender<AppState>) {
             Err(e) => println!("Error in {}: {}", description, e),
         }
 
-        thread::sleep(Duration::from_millis(500));
+        thread::sleep(Duration::from_millis(300)); // Ridotto il delay
     }
 
     let final_state = AppState {
@@ -184,11 +184,9 @@ fn run_optimization_steps(sender: mpsc::Sender<AppState>) {
 }
 
 fn step_backup_clean_update_cache() -> Result<(), String> {
-    // Backup e pulizia SoftwareDistribution
     let _ = run_command("cmd", &["/c", "if exist \"C:\\Windows\\SoftwareDistribution.bak\" rmdir /s /q \"C:\\Windows\\SoftwareDistribution.bak\""]);
     let _ = run_command("cmd", &["/c", "if exist \"C:\\Windows\\SoftwareDistribution\" ren \"C:\\Windows\\SoftwareDistribution\" \"SoftwareDistribution.bak\""]);
     
-    // Backup e pulizia catroot2
     let _ = run_command("cmd", &["/c", "if exist \"C:\\Windows\\System32\\catroot2.bak\" rmdir /s /q \"C:\\Windows\\System32\\catroot2.bak\""]);
     let _ = run_command("cmd", &["/c", "if exist \"C:\\Windows\\System32\\catroot2\" ren \"C:\\Windows\\System32\\catroot2\" \"catroot2.bak\""]);
     
@@ -227,10 +225,8 @@ fn step_timer_distribution() -> Result<(), String> {
 
 fn step_menu_delay_reduction() -> Result<(), String> {
     run_command("reg", &["add", "HKCU\\Control Panel\\Desktop", "/v", "MenuShowDelay", "/t", "REG_DWORD", "/d", "0", "/f"])?;
-	//menu contestuale classico
-	run_command("reg", &["add", "HKCU\\SOFTWARE\\CLASSES\\CLSID\\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}\\InprocServer32", "/ve", "/f"])?;
-	//mostra estensione file
-	run_command("reg", &["add", "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced", "/v", "HideFileExt", "/t", "REG_DWORD", "/d", "0", "/f"])
+    run_command("reg", &["add", "HKCU\\SOFTWARE\\CLASSES\\CLSID\\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}\\InprocServer32", "/ve", "/f"])?;
+    run_command("reg", &["add", "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced", "/v", "HideFileExt", "/t", "REG_DWORD", "/d", "0", "/f"])
 }
 
 fn step_windows_insider_experiments() -> Result<(), String> {
@@ -382,7 +378,7 @@ fn step_mouse_keyboard_optimizations() -> Result<(), String> {
 
 fn step_network_config_extended() -> Result<(), String> {
     run_command("netsh", &["int", "tcp", "reset"])?;
-	run_command("netsh", &["winsock", "reset"])?;
+    run_command("netsh", &["winsock", "reset"])?;
     run_command("ipconfig", &["/flushdns"])?;
 
     run_command("reg", &["add", "HKLM\\SYSTEM\\CurrentControlSet\\Services\\Tcpip\\Parameters", "/v", "DefaultTTL", "/t", "REG_DWORD", "/d", "64", "/f"])?;
@@ -401,14 +397,14 @@ fn step_remove_apps() -> Result<(), String> {
         "Microsoft.WindowsMaps", "Microsoft.WindowsPhone", "Microsoft.WindowsSoundRecorder",
         "Microsoft.XboxApp", "Microsoft.XboxGameCallableUI", "Microsoft.XboxIdentityProvider",
         "Microsoft.ZuneMusic", "Microsoft.ZuneVideo", "WebExperience", "Microsoft.Whiteboard",
-		"Microsoft.MicrosoftStickyNotes", "Microsoft.MixedReality.Portal", "Microsoft.Office.OneNote",
-		"Microsoft.Outlook", "Teams"
+        "Microsoft.MicrosoftStickyNotes", "Microsoft.MixedReality.Portal", "Microsoft.Office.OneNote",
+        "Microsoft.Outlook", "Teams"
     ];
 
     for app in &apps {
         let _ = run_command("PowerShell", &["-Command", &format!("Get-AppxPackage -allusers *{}* | Remove-AppxPackage", app)])?;
     }
-	
+    
     Ok(())
 }
 
@@ -470,10 +466,18 @@ fn step_final_optimizations() -> Result<(), String> {
 }
 
 fn step_restart_explorer() -> Result<(), String> {
+    // Uccidi explorer.exe (non bloccante)
     let _ = run_command("taskkill", &["/f", "/im", "explorer.exe"]);
-    thread::sleep(Duration::from_secs(3));
-    run_command("explorer.exe", &[])?;
-    thread::sleep(Duration::from_secs(2));
+    
+    // Breve attesa per assicurarsi che sia terminato
+    thread::sleep(Duration::from_millis(500));
+    
+    // Riavvia explorer.exe in background usando start
+    run_command("cmd", &["/c", "start", "explorer.exe"])?;
+    
+    // Breve attesa per la verifica
+    thread::sleep(Duration::from_millis(500));
+    
     Ok(())
 }
 
@@ -519,6 +523,6 @@ fn run_command(program: &str, args: &[&str]) -> Result<(), String> {
     if output.success() {
         Ok(())
     } else {
-        Ok(())
+        Ok(()) // Non fallire se il comando non ha successo
     }
 }
