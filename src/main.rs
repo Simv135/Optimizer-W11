@@ -104,7 +104,7 @@ fn main() -> Result<(), eframe::Error> {
         viewport: egui::ViewportBuilder::default()
             .with_inner_size([400.0, 150.0])
             .with_resizable(false)
-            .with_title("Optimizer W11  -  v1.4.0"),
+            .with_title("Optimizer W11  -  v1.4.1"),
         ..Default::default()
     };
 
@@ -149,8 +149,7 @@ fn run_optimization_steps(sender: mpsc::Sender<AppState>) {
         ("Service Configuration", step_configure_services_extended), 
         ("Graphics Optimizations", step_graphics_optimization_extended), 
         ("System Cleanup", step_system_cleanup_extended),
-        ("Final Optimizations", step_final_optimizations),
-        ("Restarting Explorer", step_restart_explorer), 
+        ("Final Optimizations", step_final_optimizations), 
     ];
 
     let total_steps = steps.len();
@@ -463,14 +462,6 @@ fn step_system_cleanup_extended() -> Result<(), String> {
 fn step_final_optimizations() -> Result<(), String> {
     run_command("fsutil", &["behavior", "set", "memoryusage", "2"])?;
     run_command("reg", &["add", "HKLM\\SYSTEM\\CurrentControlSet\\Control\\FileSystem", "/v", "NTFSDisableLastAccessUpdate", "/t", "REG_DWORD", "/d", "1", "/f"])
-}
-
-fn step_restart_explorer() -> Result<(), String> {
-    let _ = run_command("taskkill", &["/f", "/im", "explorer.exe"]);
-    thread::sleep(Duration::from_millis(500));
-    run_command("cmd", &["/c", "start", "explorer.exe"])?;
-    thread::sleep(Duration::from_millis(500));
-    Ok(())
 }
 
 fn configure_service(service: &str, start_type: &str) -> Result<(), String> {
