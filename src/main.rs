@@ -466,22 +466,13 @@ fn step_final_optimizations() -> Result<(), String> {
 }
 
 fn step_restart_explorer() -> Result<(), String> {
-    // Uccidi explorer.exe (non bloccante)
     let _ = run_command("taskkill", &["/f", "/im", "explorer.exe"]);
-    
-    // Breve attesa per assicurarsi che sia terminato
     thread::sleep(Duration::from_millis(500));
-    
-    // Riavvia explorer.exe in background usando start
     run_command("cmd", &["/c", "start", "explorer.exe"])?;
-    
-    // Breve attesa per la verifica
     thread::sleep(Duration::from_millis(500));
-    
     Ok(())
 }
 
-// Funzioni helper
 fn configure_service(service: &str, start_type: &str) -> Result<(), String> {
     let output = create_command("sc")
         .args(&["query", service])
