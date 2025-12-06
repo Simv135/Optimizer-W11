@@ -491,7 +491,6 @@ fn configure_service(service: &str, start_type: &str) -> Result<(), String> {
     Ok(())
 }
 
-// Crea un comando con la console nascosta
 fn create_command(program: &str) -> Command {
     let mut command = Command::new(program);
     
@@ -514,6 +513,6 @@ fn run_command(program: &str, args: &[&str]) -> Result<(), String> {
     if output.success() {
         Ok(())
     } else {
-        Ok(()) // Non fallire se il comando non ha successo
+        Ok(())
     }
 }
