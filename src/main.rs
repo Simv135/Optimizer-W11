@@ -104,7 +104,7 @@ fn main() -> Result<(), eframe::Error> {
         viewport: egui::ViewportBuilder::default()
             .with_inner_size([400.0, 150.0])
             .with_resizable(false)
-            .with_title("Optimizer W11  -  v1.4.1"),
+            .with_title("Optimizer W11  -  v1.4.2"),
         ..Default::default()
     };
 
@@ -305,7 +305,10 @@ fn step_preinstalled_apps() -> Result<(), String> {
     run_command("reg", &["add", "HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager", "/v", "SilentInstalledAppsEnabled", "/t", "REG_DWORD", "/d", "0", "/f"])?;
     run_command("reg", &["add", "HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager", "/v", "OemPreInstalledAppsEnabled", "/t", "REG_DWORD", "/d", "0", "/f"])?;
     run_command("reg", &["add", "HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager", "/v", "ContentDeliveryAllowed", "/t", "REG_DWORD", "/d", "0", "/f"])?;
-    run_command("reg", &["add", "HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager", "/v", "SubscribedContentEnabled", "/t", "REG_DWORD", "/d", "0", "/f"])
+    run_command("reg", &["add", "HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager", "/v", "SubscribedContentEnabled", "/t", "REG_DWORD", "/d", "0", "/f"])?;
+    run_command("reg", &["add", "HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\GameDVR", "/v", "AppCaptureEnabled", "/t", "REG_DWORD", "/d", "0", "/f"])?;
+    run_command("reg", &["add", "HKCU\\System\\GameConfigStore", "/v", "GameDVR_Enabled", "/t", "REG_DWORD", "/d", "0", "/f"])?;
+    run_command("reg", &["add", "HKCU\\SOFTWARE\\Policies\\Microsoft\\Windows\\GameDVR", "/v", "AllowGameDVR", "/t", "REG_DWORD", "/d", "0", "/f"])
 }
 
 fn step_windows_suggestions() -> Result<(), String> {
